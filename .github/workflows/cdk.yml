@@ -28,8 +28,14 @@ on:
         default: us-east-1
 
       aws-account:
-        required: true
+        required: false
         type: string
+        default: 214293868017 # my personal
+      
+      deploy-method:
+        required: false
+        type: string
+        default: change-set
 
     secrets:
       aws-access-key-id:
@@ -80,7 +86,7 @@ jobs:
         if: inputs.cdk-bootstrap
         working-directory: aws
 
-      - run: yarn cdk ${{ inputs.cdk-command }} "*" --context stage=${{ inputs.environment-name }} --require-approval never --verbose
+      - run: yarn cdk ${{ inputs.cdk-command }} "*" -m ${{ inputs.deploy-method }} --context stage=${{ inputs.environment-name }} --require-approval never --verbose
         name: Deploy  ${{ inputs.environment-name }}
         if: inputs.cdk-command != 'destroy'
         working-directory: aws

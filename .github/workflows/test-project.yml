@@ -31,6 +31,6 @@ jobs:
         uses: abatilo/actions-poetry@v2
         with:
           poetry-version: "1.3.2"
-      - run: bash bin/init.sh
+      - run: find ./src -name pyproject.toml -printf "%h\n" | sort -nr | while read -r i; do cd "$i" && poetry install; done
       - run: pip3 install pytest
       - run: pytest

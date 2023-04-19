@@ -1,0 +1,21 @@
+name: Deploy-Branch
+run-name: Deploy to branch ${{ github.head_ref }} by @${{ github.actor }}
+on:
+  pull_request:
+    types: [labeled, synchronize]
+    branches: ["main"]
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+jobs:
+  deploy-pr:
+    if: ${{ github.event.label.name == 'Deploy' || contains(github.event.pull_request.labels.*.name, 'Deploy') }}
+    name: Deploy to pr-${{ github.event.number }}
+    uses: ./.github/workflows/deploy.yml
+    with:
+      environment-name: pr-${{ github.event.number }}
+    secrets:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

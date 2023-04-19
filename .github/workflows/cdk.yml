@@ -1,0 +1,91 @@
+name: Run-CDK
+run-name: CDK ${{ github.event.inputs.cdk-command }} ${{ github.event.inputs.environment-name }} by @${{ github.actor }}
+on:
+  workflow_call:
+    inputs:
+      environment-name:
+        required: false
+        default: beta
+        type: string
+
+      cdk-command:
+        required: true
+        type: string
+
+      cdk-bootstrap:
+        required: false
+        type: boolean
+        default: true
+
+      cdk-pre-command:
+        required: false
+        type: string
+        default: echo "No pre commands, skipping"
+
+      aws-region:
+        required: false
+        type: string
+        default: us-east-1
+
+      aws-account:
+        required: true
+        type: string
+
+    secrets:
+      aws-access-key-id:
+        required: true
+
+      aws-secret-access-key:
+        required: true
+
+concurrency:
+  group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      ALLOWED_STAGES: ${{ inputs.environment-name }}
+      AWS_REGION: ${{ inputs.aws-region }}
+      AWS_ACCOUNT: ${{ inputs.aws-account }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.aws-access-key-id }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.aws-secret-access-key }}
+      DOCKER_TARGET_PLATFORM: linux/arm64/v8
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache-dependency-path: aws/yarn.lock
+          node-version: "16.x"
+          cache: "yarn"
+
+      - run: yarn install
+        working-directory: aws
+
+      - # Add support for more platforms with QEMU (optional)
+        # https://github.com/docker/setup-qemu-action
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - run: ${{ inputs.cdk-pre-command }}
+        working-directory: aws
+
+      - run: yarn cdk bootstrap --context stage=${{ inputs.environment-name }}
+        name: Bootstrap ${{ inputs.environment-name }}
+        if: inputs.cdk-bootstrap
+        working-directory: aws
+
+      - run: yarn cdk ${{ inputs.cdk-command }} "*" --context stage=${{ inputs.environment-name }} --require-approval never --verbose
+        name: Deploy  ${{ inputs.environment-name }}
+        if: inputs.cdk-command != 'destroy'
+        working-directory: aws
+
+      - run: yarn cdk ${{ inputs.cdk-command }} "*" --force --context stage=${{ inputs.environment-name }} --verbose
+        name: Destroy ${{ inputs.environment-name }}
+        if: inputs.cdk-command == 'destroy'
+        working-directory: aws

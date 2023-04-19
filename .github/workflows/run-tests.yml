@@ -1,0 +1,9 @@
+name: Run tests
+run-name: Run Tests for ${{ github.head_ref }} by @${{ github.actor }}
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-apis:
+    uses: ./.github/workflows/test.yml

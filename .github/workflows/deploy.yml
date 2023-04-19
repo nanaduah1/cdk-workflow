@@ -1,0 +1,33 @@
+name: Deploy-Branch
+run-name: Deploy to ${{ inputs.environment-name }} ${{ github.head_ref }} by @${{ github.actor }}
+on:
+  workflow_call:
+    inputs:
+      environment-name:
+        required: false
+        default: beta
+        type: string
+
+    secrets:
+      aws-access-key-id:
+        required: true
+
+      aws-secret-access-key:
+        required: true
+
+jobs:
+  deploy-pr:
+    if: ${{ github.event.label.name == 'Deploy' || contains(github.event.pull_request.labels.*.name, 'Deploy') }}
+    name: Deploy to pr-${{ github.event.number }}
+    uses: ./.github/workflows/cdk.yml
+    with:
+      cdk-command: deploy
+      environment-name: ${{ inputs.environment-name }}
+
+      #This must be updated to match the deployment account
+      aws-account: 214293868017
+      aws-region: us-east-1
+      cdk-pre-command: echo "Running...."
+    secrets:
+      aws-access-key-id: ${{ secrets.aws-access-key-id }}
+      aws-secret-access-key: ${{ secrets.aws-secret-access-key }}

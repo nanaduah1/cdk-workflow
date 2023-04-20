@@ -2,9 +2,6 @@ name: Run tests
 on:
   workflow_call:
 jobs:
-  changes:
-    uses: ./.github/workflows/changes.yml
-
   run-node-tests:
     runs-on: ubuntu-latest
     steps:

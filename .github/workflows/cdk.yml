@@ -66,6 +66,7 @@ jobs:
           cache-dependency-path: aws/yarn.lock
           node-version: "16.x"
           cache: "yarn"
+          registry-url: https://npm.pkg.github.com/
 
       - run: yarn install
         working-directory: aws

@@ -43,8 +43,6 @@ on:
 
       aws-secret-access-key:
         required: true
-      github-token:
-        required: true
 
 concurrency:
   group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
@@ -80,8 +78,6 @@ jobs:
           registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
           
       - run: yarn install --frozen-lockfile
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.github-token}}
         working-directory: aws
 
       - # Add support for more platforms with QEMU (optional)

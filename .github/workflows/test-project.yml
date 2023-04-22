@@ -1,6 +1,11 @@
 name: Run tests
 on:
   workflow_call:
+    inputs:
+      root-directory:
+        type: string
+        required: false
+        default: "./src"
         
 jobs:
   run-node-tests:
@@ -44,6 +49,6 @@ jobs:
           poetry-version: "1.3.2"
       - run: |
           ROOT_DIR=$(pwd)
-          find ./src -name pyproject.toml -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && poetry install; done
+          find ${{ inputs.root-directory }} -name pyproject.toml -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && poetry install; done
       - run: pip3 install pytest
       - run: pytest

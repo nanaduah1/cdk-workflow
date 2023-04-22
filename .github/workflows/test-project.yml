@@ -1,9 +1,6 @@
 name: Run tests
 on:
   workflow_call:
-    secrets:
-      github-token:
-        required: true
         
 jobs:
   run-node-tests:

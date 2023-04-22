@@ -10,9 +10,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/node-install
+      - uses: actions/setup-node@v3
         with:
-          github-token: ${{ secrets.github-token }}
+          cache-dependency-path: aws/yarn.lock
+          node-version: "16.x"
+          cache: "yarn"
+      - run: |
+          CAT <<EOF > .npmrc
+          registry=https://registry.yarnpkg.com/
+
+          @nanaduah1:registry=https://npm.pkg.github.com
+          //npm.pkg.github.com/:_authToken=${{ secrets.github-token }}
+          always-auth=true
+          EOF
+        working-directory: aws
 
       - run: yarn install --frozen-lockfile && yarn test
         name: Test aws

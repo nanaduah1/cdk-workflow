@@ -43,6 +43,8 @@ on:
 
       aws-secret-access-key:
         required: true
+      github-token:
+        required: true
 
 concurrency:
   group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
@@ -60,14 +62,10 @@ jobs:
       DOCKER_TARGET_PLATFORM: linux/arm64/v8
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: ./github/workflows/node.yml
         with:
-          cache-dependency-path: aws/yarn.lock
-          node-version: "16.x"
-          cache: "yarn"
-          registry-url: https://npm.pkg.github.com/
-
+          github-token: ${{ secrets.github-token }}
+          
       - run: yarn install
         working-directory: aws
 

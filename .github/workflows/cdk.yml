@@ -70,7 +70,9 @@ jobs:
           cache: "yarn"
           registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
           
-      - run: yarn install
+      - run: npm ci --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.github-token}}
         working-directory: aws
 
       - # Add support for more platforms with QEMU (optional)

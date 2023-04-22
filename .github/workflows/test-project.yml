@@ -4,7 +4,7 @@ on:
     secrets:
       github-token:
         required: true
-        type: string
+        
 jobs:
   run-node-tests:
     runs-on: ubuntu-latest

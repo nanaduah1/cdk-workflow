@@ -29,5 +29,5 @@ jobs:
           registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
       - run: |
           ROOT_DIR=$(pwd)
-          find ${{ inputs.root-directory }} -name package.json -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && yarn lint; done
+          find ${{ inputs.root-directory }} -name package.json -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && yarn install && yarn lint; done
       

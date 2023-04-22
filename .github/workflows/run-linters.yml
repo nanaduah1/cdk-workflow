@@ -1,0 +1,33 @@
+name: Run Linters
+on:
+  workflow_call:
+    inputs:
+      root-directory:
+        type: string
+        required: false
+        default: "."
+        
+jobs:
+  linters:
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      packages: write
+      pull-requests: write
+      repository-projects: write
+      security-events: write
+      statuses: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          cache-dependency-path: aws/yarn.lock
+          node-version: "16.x"
+          cache: "yarn"
+          registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
+      - run: |
+          ROOT_DIR=$(pwd)
+          find ${{ inputs.root-directory }} -name package.json -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && yarn lint; done
+      

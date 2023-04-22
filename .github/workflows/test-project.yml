@@ -1,17 +1,18 @@
 name: Run tests
 on:
   workflow_call:
+    secrets:
+      github-token:
+        required: true
+        type: string
 jobs:
   run-node-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: ./github/workflows/node.yml
         with:
-          cache-dependency-path: aws/yarn.lock
-          node-version: "16.x"
-          cache: "yarn"
-          registry-url: https://npm.pkg.github.com/
+          github-token: ${{ secrets.github-token }}
 
       - run: yarn install --frozen-lockfile && yarn test
         name: Test aws

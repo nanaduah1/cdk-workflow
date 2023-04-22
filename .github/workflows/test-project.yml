@@ -17,7 +17,7 @@ jobs:
           cache: "yarn"
           registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
 
-      - run: npm ci --ignore-scripts
+      - run: yarn install --frozen-lockfile
         env:
           NODE_AUTH_TOKEN: ${{secrets.github-token}}
         working-directory: aws

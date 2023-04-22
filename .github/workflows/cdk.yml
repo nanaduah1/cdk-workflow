@@ -62,7 +62,7 @@ jobs:
       DOCKER_TARGET_PLATFORM: linux/arm64/v8
 
     steps:
-      - uses: ./github/workflows/node-install
+      - uses: ./.github/workflows/node-install
         with:
           github-token: ${{ secrets.github-token }}
           

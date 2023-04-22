@@ -15,15 +15,7 @@ jobs:
           cache-dependency-path: aws/yarn.lock
           node-version: "16.x"
           cache: "yarn"
-      - run: |
-          CAT <<EOF > .npmrc
-          registry=https://registry.yarnpkg.com/
-
-          @nanaduah1:registry=https://npm.pkg.github.com
-          //npm.pkg.github.com/:_authToken=${{ secrets.github-token }}
-          always-auth=true
-          EOF
-        working-directory: aws
+          registry-url: @nanaduah1:registry=https://npm.pkg.github.com
 
       - run: yarn install --frozen-lockfile && yarn test
         name: Test aws

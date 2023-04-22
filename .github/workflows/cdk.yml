@@ -53,6 +53,15 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      packages: write
+      pull-requests: write
+      repository-projects: write
+      security-events: write
+      statuses: write
     env:
       ALLOWED_STAGES: ${{ inputs.environment-name }}
       AWS_REGION: ${{ inputs.aws-region }}
@@ -69,13 +78,6 @@ jobs:
           node-version: "16.x"
           cache: "yarn"
           registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
-
-      # - run: |
-      #     echo "registry=https://registry.yarnpkg.com/" > .npmrc
-      #     echo "" >> .npmrc
-      #     echo "@nanaduah1:registry=https://npm.pkg.github.com"  >> .npmrc
-      #     echo "//npm.pkg.github.com/:_authToken=${{secrets.github-token}}" >> .npmrc
-      #     echo "always-auth=true" >> .npmrc
           
       - run: yarn install --frozen-lockfile
         env:

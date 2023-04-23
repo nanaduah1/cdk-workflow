@@ -63,5 +63,8 @@ jobs:
       - run: |
           ROOT_DIR=$(pwd)
           find ${{ inputs.root-directory }} -name pyproject.toml -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && poetry install; done
-      - run: pip3 install pytest
-      - run: pytest
+      
+      - run: |
+          ROOT_DIR=$(pwd)
+          find ${{ inputs.root-directory }} -name pyproject.toml -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && poetry run pytest; done
+      

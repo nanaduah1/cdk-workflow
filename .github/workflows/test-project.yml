@@ -63,11 +63,9 @@ jobs:
       - run: |
           ROOT_DIR=$(pwd)
           find ${{ inputs.root-directory }} -name pyproject.toml -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && poetry install; done
+
+      - run: |
+          ROOT_DIR=$(pwd)
+          find ${{ inputs.root-directory }} -name pyproject.toml -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && poetry run pytest -rP; done
       
-      - run: pip3 install pytest
-      - name: Create Pytest Ini
-        run: |
-          echo "[pytest]" > pytest.ini
-          echo "python_files = */tests/*.py" >> pytest.ini
-          
-      - run: pytest
+      

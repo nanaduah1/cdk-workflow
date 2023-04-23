@@ -9,7 +9,6 @@ on:
         
 jobs:
   run-node-tests:
-    if: inputs.yarntest == 'on'
     permissions:
       actions: write
       checks: write

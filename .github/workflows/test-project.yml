@@ -49,7 +49,7 @@ jobs:
           python-version: "3.9"
 
       - name: Setup DynamoDB Local
-        if: ${{ inputs.dynamodb == "on" }}
+        if: inputs.dynamodb == 'on'
         uses: rrainn/dynamodb-action@v2.0.1
         with:
           port: 8000

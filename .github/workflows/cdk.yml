@@ -76,10 +76,11 @@ jobs:
           node-version: "16.x"
           cache: "yarn"
           registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
+          token: ${{ secrets.NPM_ACCESS_TOKEN }}
           
       - run: yarn install --frozen-lockfile
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+#         env:
+#           NODE_AUTH_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
         working-directory: aws
 
       - # Add support for more platforms with QEMU (optional)

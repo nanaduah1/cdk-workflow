@@ -78,6 +78,8 @@ jobs:
           registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
           
       - run: yarn install --frozen-lockfile
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: aws
 
       - # Add support for more platforms with QEMU (optional)

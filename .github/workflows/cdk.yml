@@ -51,15 +51,6 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      checks: write
-      contents: write
-      packages: read
-      pull-requests: write
-      repository-projects: write
-      security-events: write
-      statuses: write
     env:
       ALLOWED_STAGES: ${{ inputs.environment-name }}
       AWS_REGION: ${{ inputs.aws-region }}
@@ -75,14 +66,11 @@ jobs:
           cache-dependency-path: aws/yarn.lock
           node-version: "16.x"
           cache: "yarn"
-          registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
           
       - run: yarn install --frozen-lockfile
         working-directory: aws
 
-      - # Add support for more platforms with QEMU (optional)
-        # https://github.com/docker/setup-qemu-action
-        name: Set up QEMU
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
 
       - name: Set up Docker Buildx

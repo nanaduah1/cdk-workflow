@@ -2,8 +2,6 @@ name: Create Release
 run-name: Create Production release by @${{ github.actor }}
 on:
   workflow_call:
-    branches: [main]
-
 jobs:
   create-release:
     runs-on: ubuntu-latest

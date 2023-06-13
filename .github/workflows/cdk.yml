@@ -84,7 +84,7 @@ jobs:
         if: inputs.cdk-bootstrap
         working-directory: aws
 
-      - run: yarn cdk ${{ inputs.cdk-command }} "*" -m ${{ inputs.deploy-method }} --context stage=${{ inputs.environment-name }} --require-approval never --verbose
+      - run: yarn cdk ${{ inputs.cdk-command }} "*" --force -m ${{ inputs.deploy-method }} --context stage=${{ inputs.environment-name }} --require-approval never --verbose
         name: Deploy  ${{ inputs.environment-name }}
         if: inputs.cdk-command != 'destroy'
         working-directory: aws

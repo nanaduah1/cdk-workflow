@@ -77,7 +77,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Update poetry locks
-        uses: .github/workflows/exec-cmd.yml
+        uses: ./.github/workflows/exec-cmd.yml
         with:
           command: poetry lock --no-update
           pattern: pyproject.toml

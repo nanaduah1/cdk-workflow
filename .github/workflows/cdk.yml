@@ -76,14 +76,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
 
-      - name: Update poetry locks
-        uses: ./.github/workflows/exec-cmd.yml
-        with:
-          command: poetry lock --no-update
-          pattern: pyproject.toml
-          src: ./
-          filter: .venv
-
       - run: ${{ inputs.cdk-pre-command }}
         working-directory: aws
 

@@ -1,0 +1,47 @@
+name: Find and execute shell command
+on:
+  workflow_call:
+    inputs:
+      src:
+        type: string
+        required: false
+        default: "./"
+      
+      pattern:
+        type: string
+        required: true
+        default: "*.toml"
+
+      command:
+        type: string
+        required: true
+        default: "poetry lock --no-update" # Update poetry lock files
+      
+      filter:
+        type: string
+        required: false
+
+
+jobs:
+  find-and-execute-command:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.3.2"
+
+      - if: inputs.filter
+        run: |
+          ROOT_DIR=$(pwd)
+          find ${{ inputs.src }} -name ${{ inputs.pattern }} | grep -v "${{ inputs.filter }}" | xargs dirname | while read -r i; do cd $ROOT_DIR && cd "$i" && ${{ inputs.command }}; done
+      
+      - if: ${{ ! inputs.filter }}
+        run: |
+          ROOT_DIR=$(pwd)
+          find ${{ inputs.src }} -name ${{ inputs.pattern }} | xargs dirname | while read -r i; do cd $ROOT_DIR && cd "$i" && ${{ inputs.command }}; done
+
+     
+
+

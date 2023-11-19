@@ -37,6 +37,11 @@ on:
         type: string
         default: change-set
 
+      node_version:
+        type: string
+        required:  false
+        default: "18.x"
+
     secrets:
       aws-access-key-id:
         required: true
@@ -64,7 +69,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache-dependency-path: aws/yarn.lock
-          node-version: "16.x"
+          node-version:  ${{ inputs.node_version }}
           cache: "yarn"
           
       - run: yarn install --frozen-lockfile

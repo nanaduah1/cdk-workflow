@@ -6,7 +6,12 @@ on:
         type: string
         required: false
         default: "./"
-        
+
+      node_version:
+        type: string
+        required:  false
+        default: "18.x"
+      
 jobs:
   run-node-tests:
     runs-on: ubuntu-latest
@@ -15,7 +20,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache-dependency-path: aws/yarn.lock
-          node-version: "16.x"
+          node-version: ${{ inputs.node_version }}
           cache: "yarn"
 
       - run: yarn install --frozen-lockfile

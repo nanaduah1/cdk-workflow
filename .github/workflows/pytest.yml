@@ -26,10 +26,6 @@ on:
 jobs:
   run-python-tests:
     runs-on: ubuntu-latest
-    env: 
-      AWS_ACCESS_KEY_ID: test
-      AWS_SECRET_ACCESS_KEY: test
-      AWS_DEFAULT_REGION: us-east-1
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -55,5 +51,9 @@ jobs:
       - run: |
           ROOT_DIR=$(pwd)
           find ${{ inputs.root-directory }} -name pyproject.toml -printf "%h\n" | sort -nr | while read -r i; do cd $ROOT_DIR && cd "$i" && poetry run pytest -rP; done
+        env: 
+          AWS_ACCESS_KEY_ID: test
+          AWS_SECRET_ACCESS_KEY: test
+          AWS_DEFAULT_REGION: us-east-1
       
       

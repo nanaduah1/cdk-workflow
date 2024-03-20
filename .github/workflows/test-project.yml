@@ -29,7 +29,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           cache-dependency-path: aws/yarn.lock
-          node-version: "16.x"
+          node-version: "20.x"
           cache: "yarn"
           registry-url: "@nanaduah1:registry=https://npm.pkg.github.com"
 

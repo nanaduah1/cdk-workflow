@@ -49,6 +49,9 @@ on:
       aws-secret-access-key:
         required: true
 
+      ssh-public-key:
+        required: false
+
 concurrency:
   group: "${{ github.workflow }} @ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
   cancel-in-progress: true
@@ -63,6 +66,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.aws-access-key-id }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.aws-secret-access-key }}
       DOCKER_TARGET_PLATFORM: linux/arm64/v8
+      SSH_PUBLIC_KEY: ${{ secrets.ssh-public-key }}
 
     steps:
       - uses: actions/checkout@v3
